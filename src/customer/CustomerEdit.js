@@ -20,7 +20,7 @@ function CustomerEdit() {
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch(`https://api-auladiser.onrender.com/customers/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers/${id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -48,18 +48,11 @@ function CustomerEdit() {
         }
     }
 
-    useEffect(() => {
-        getCustomer();
-    }, [id]);
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setErrors({});
-
+    async function updateCustomer(){
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch(`https://api-auladiser.onrender.com/customers/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers/${id}`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -88,6 +81,17 @@ function CustomerEdit() {
         } catch (error) {
             console.error(error);
         }
+    }
+
+    useEffect(() => {
+        getCustomer();
+    }, [id]);
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setErrors({});
+
+        updateCustomer();
     }
 
     const hasError = (field) => !!errors[field];
