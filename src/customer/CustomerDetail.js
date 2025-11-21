@@ -13,7 +13,7 @@ function CustomerDetail() {
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch(`https://api-auladiser.onrender.com/customers/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers/${id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
