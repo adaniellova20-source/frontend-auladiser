@@ -12,7 +12,7 @@ function CustomerList() {
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch("https://api-auladiser.onrender.com/customers", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -39,7 +39,7 @@ function CustomerList() {
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch(`https://api-auladiser.onrender.com/customers/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
