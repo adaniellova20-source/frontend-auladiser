@@ -21,7 +21,7 @@ function CustomerCreate() {
         try {
             const token = sessionStorage.getItem("token");
 
-            const response = await fetch("https://api-auladiser.onrender.com/customers", {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/customers`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -195,4 +195,5 @@ function CustomerCreate() {
         </div>
     );
 }
+
 export default CustomerCreate;
