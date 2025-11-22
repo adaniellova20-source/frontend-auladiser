@@ -68,7 +68,7 @@ function CustomerDetail() {
                 <p><strong>Edad:</strong> {customer?.age}</p>
                 <p><strong>Fecha de nacimiento:</strong> {customer?.birthday}</p>
                 <p><strong>Categoría:</strong> {customer?.category}</p>
-                <p><strong>URL:</strong> {customer?.url}</p>
+                <a href={customer?.url} target="_blank">URL</a>
             </div>
 
         </div>
