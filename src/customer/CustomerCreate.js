@@ -14,10 +14,7 @@ function CustomerCreate() {
 
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrors({});
-
+    async function createCustomer(){
         try {
             const token = sessionStorage.getItem("token");
 
@@ -50,6 +47,13 @@ function CustomerCreate() {
         } catch (err) {
             console.error(err);
         }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrors({});
+
+        createCustomer();
     };
 
     const hasError = (field) => errors && errors[field];
