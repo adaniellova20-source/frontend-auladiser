@@ -1,61 +1,93 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./Navbar";
-import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import CustomerList from "./customer/CustomerList";
-import CustomerDetail from "./customer/CustomerDetail";
-import CustomerCreate from "./customer/CustomerCreate";
-import CustomerEdit from "./customer/CustomerEdit";
+import Navbar from "./components/NavBar";
+import Main from "./components/Main";
+import Login from "./pages/Login";
+import CustomerList from "./pages/CustomerList";
+import CustomerDetail from "./pages/CustomerDetail";
+import CustomerCreate from "./pages/CustomerCreate";
+import CustomerEdit from "./pages/CustomerEdit";
+
+
+function ProtectedRoute({ children }) {
+    const token = sessionStorage.getItem("token");
+    return token ? children : <Navigate to="/login" replace />;
+}
 
 function App() {
-
-    async function getToken() {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: process.env.REACT_APP_USER,
-                    password: process.env.REACT_APP_PASSWORD
-                })
-            });
-
-            if (!response.ok) {
-                alert("Credenciales incorrectas");
-                return;
-            }
-
-            const token = await response.text();
-
-            sessionStorage.setItem("token", token);
-
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-    useEffect(()=>{
-        getToken();
-    }, []);
+    const isAuthenticated = !!sessionStorage.getItem("token");
 
     return (
-        <BrowserRouter>
-            <Navbar />
+        <>
+            {isAuthenticated && <Navbar />}
 
-            <div className="container mt-4">
-                <Routes>
-                    <Route path="/" element={<h2>Inicio</h2>} />
+            <Routes>
+                <Route
+                    path="/login"
+                    element={
+                        isAuthenticated ? <Navigate to="/main" replace /> : <Login />
+                    }
+                />
 
-                    <Route path="/customers" element={<CustomerList/>} />
-                    <Route path="/customers/new" element={<CustomerCreate />} />
-                    <Route path="/customers/edit/:id" element={<CustomerEdit />} />
-                    <Route path="/customers/:id" element={<CustomerDetail />} />
+                <Route
+                    path="/"
+                    element={
+                        isAuthenticated ? (
+                            <Navigate to="/main" replace />
+                        ) : (
+                            <Navigate to="/login" replace />
+                        )
+                    }
+                />
 
-                </Routes>
-            </div>
-        </BrowserRouter>
+                <Route
+                    path="/main"
+                    element={
+                        <ProtectedRoute>
+                            <Main />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/customers"
+                    element={
+                        <ProtectedRoute>
+                            <CustomerList />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/customers/new"
+                    element={
+                        <ProtectedRoute>
+                            <CustomerCreate />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/customers/:id"
+                    element={
+                        <ProtectedRoute>
+                            <CustomerDetail />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/customers/edit/:id"
+                    element={
+                        <ProtectedRoute>
+                            <CustomerEdit />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </>
     );
 }
 
