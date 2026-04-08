@@ -1,7 +1,7 @@
 # Nombre del workflow que se muestra en GitHub Actions
 name: Deploy a Render
 
-# Disparador: se ejecuta cuando hay un push a la rama "pytest"
+# Disparador: se ejecuta cuando hay un push a la rama "main"
 on:
   push:
     branches: [main]
