@@ -1,0 +1,21 @@
+# Nombre del workflow que se muestra en GitHub Actions
+name: Deploy a Render
+
+# Disparador: se ejecuta cuando hay un push a la rama "pytest"
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # ------------------------------
+  # Job 1: Despliegue en Render
+  # ------------------------------
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Lanza el despliegue en Render usando un Deploy Hook
+      - name: Desplegar en Render
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: curl -fsS -X POST "$RENDER_DEPLOY_HOOK" # Ejecuta el deploy en Render
